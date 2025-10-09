@@ -23,8 +23,9 @@ Proyecto para controlar un carro con ESP32 usando un servidor HTTP y publicació
 
 ## Documentación
 - **Colección Postman**: Disponible en [`/docs/docs/control.postman_collection.json`](./docs/control.postman_collection.json).
--  **Diagrma**: Disponible en [`/docs/image.svg`](./docs/image.svg).
--  **Imagenes**: Disponible en [`/ima`](./ima).
+- **Codigo**: Disponible en [`/docs/Control.ino`](./docs/Control.ino).
+- **Diagrma**: Disponible en [`/docs/image.svg`](./docs/image.svg).
+- **Imagenes**: Disponible en [`/ima`](./ima).
 ## Colaboradores
 
 - Profesor: [@fabianpaeri](https://github.com/fabianpaeri) (Docente).
