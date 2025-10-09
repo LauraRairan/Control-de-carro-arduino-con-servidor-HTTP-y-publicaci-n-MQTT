@@ -21,8 +21,8 @@ Proyecto para controlar un carro con ESP32 usando un servidor HTTP y publicació
 - Librerías: ESPAsyncWebServer, AsyncTCP (para el server), PubSubClient (para MQTT).
 - Cambia SSID y password en el código.
 
-## Diagrama de Secuencia
-Ver docs/sequence_diagram.png
+## Documentación
+- **Colección Postman**: Disponible en [/docs/postman_collection.json](./docs/Control de carro arduino con servidor HTTP y publicacion MQTT.postman_collection.json).
+- - **Diagrma**: Disponible en [/docs/postman_collection.json](./docs/Control de carro arduino con servidor HTTP y publicacion MQTT.postman_collection.json).
 
-## Postman
-Ver docs/car-control.postman_collection.json
+
