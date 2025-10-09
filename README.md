@@ -18,7 +18,7 @@ Proyecto para controlar un carro con ESP32 usando un servidor HTTP y publicació
 - Mensaje ejemplo: "Direction: forward, Speed: 200, Duration: 3000, Client IP: 192.168.1.100"
 
 ## Instalación
-- Librerías: ESPAsyncWebServer.
+- Librerías: WebServer.
 - Cambia SSID y password en el código.
 
 ## Documentación
