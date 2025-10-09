@@ -22,7 +22,7 @@ Proyecto para controlar un carro con ESP32 usando un servidor HTTP y publicació
 - Cambia SSID y password en el código.
 
 ## Documentación
-- **Colección Postman**: Disponible en [`/docs/docs/Control de carro arduino con servidor HTTP y publicacion MQTT.postman_collection.json`](./docs/docs/Control de carro arduino con servidor HTTP y publicacion MQTT.postman_collection.json).
+- **Colección Postman**: Disponible en [`/docs/docs/control.postman_collection.json`](./docs/control.postman_collection.json).
 - - **Diagrma**: Disponible en [`/docs/image.svg`](./docs/image.svg).
 
 
