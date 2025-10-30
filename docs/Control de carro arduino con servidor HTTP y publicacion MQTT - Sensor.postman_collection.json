@@ -1,0 +1,207 @@
+{
+	"info": {
+		"_postman_id": "4adc79c9-7085-4e06-9b4c-a91eee94d5d8",
+		"name": "Control de carro arduino con servidor HTTP y publicacion MQTT - Sensor",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43479019",
+		"_collection_link": "https://laura-8411028.postman.co/workspace/Laura's-Workspace~ad365e1b-15b9-420f-82a5-dde16b54a9c5/collection/43479019-4adc79c9-7085-4e06-9b4c-a91eee94d5d8?action=share&source=collection_link&creator=43479019"
+	},
+	"item": [
+		{
+			"name": "Adelante",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.246.87.77/control?direction=forward&speed=255&duration=2000",
+					"protocol": "http",
+					"host": [
+						"10",
+						"246",
+						"87",
+						"77"
+					],
+					"path": [
+						"control"
+					],
+					"query": [
+						{
+							"key": "direction",
+							"value": "forward"
+						},
+						{
+							"key": "speed",
+							"value": "255"
+						},
+						{
+							"key": "duration",
+							"value": "2000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atras",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.246.87.77/control?direction=backward&speed=255&duration=2000",
+					"protocol": "http",
+					"host": [
+						"10",
+						"246",
+						"87",
+						"77"
+					],
+					"path": [
+						"control"
+					],
+					"query": [
+						{
+							"key": "direction",
+							"value": "backward"
+						},
+						{
+							"key": "speed",
+							"value": "255"
+						},
+						{
+							"key": "duration",
+							"value": "2000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Izquierda",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.246.87.77/control?direction=left&speed=255&duration=2000",
+					"protocol": "http",
+					"host": [
+						"10",
+						"246",
+						"87",
+						"77"
+					],
+					"path": [
+						"control"
+					],
+					"query": [
+						{
+							"key": "direction",
+							"value": "left"
+						},
+						{
+							"key": "speed",
+							"value": "255"
+						},
+						{
+							"key": "duration",
+							"value": "2000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Derecha",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.246.87.77/control?direction=right&speed=255&duration=2000",
+					"protocol": "http",
+					"host": [
+						"10",
+						"246",
+						"87",
+						"77"
+					],
+					"path": [
+						"control"
+					],
+					"query": [
+						{
+							"key": "direction",
+							"value": "right"
+						},
+						{
+							"key": "speed",
+							"value": "255"
+						},
+						{
+							"key": "duration",
+							"value": "2000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.246.87.77/status",
+					"protocol": "http",
+					"host": [
+						"10",
+						"246",
+						"87",
+						"77"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Stop",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.100.87.77/control?direction=forward&speed=0&duration=0",
+					"protocol": "http",
+					"host": [
+						"10",
+						"100",
+						"87",
+						"77"
+					],
+					"path": [
+						"control"
+					],
+					"query": [
+						{
+							"key": "direction",
+							"value": "forward"
+						},
+						{
+							"key": "speed",
+							"value": "0"
+						},
+						{
+							"key": "duration",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
