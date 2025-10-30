@@ -28,7 +28,8 @@ Proyecto para controlar un carro con ESP32 mediante un servidor HTTP y publicaci
 
   ## Variables de Preprocesador
   Las constantes del sistema se definen con #define en un archivo config.h, que se incluye en el código principal.
-  // Pines de los motores
+ ```cpp
+// Pines de los motores
 #define ENA 14
 #define ENB 32
 #define IN1 27
@@ -52,6 +53,8 @@ Proyecto para controlar un carro con ESP32 mediante un servidor HTTP y publicaci
 
 // Intervalo de lectura del sensor (ms)
 #define SENSOR_READ_INTERVAL 2000
+```
+
 
 
 
