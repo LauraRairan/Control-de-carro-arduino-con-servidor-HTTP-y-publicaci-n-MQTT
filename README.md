@@ -19,7 +19,7 @@ Proyecto para controlar un carro con ESP32 mediante un servidor HTTP y publicaci
 ## MQTT
 - Broker: test.mosquitto.org:1883
 - Topic: car/instructions
-- Mensaje ejemplo: "Direction: forward, Speed: 200, Duration: 3000, Client IP: 192.168.1.100"
+- Mensaje ejemplo: ```cpp "Direction: forward, Speed: 200, Duration: 3000, Client IP: 192.168.1.100" ```
 
   ## Sensor Ultrasónico (HC-SR04)
   - El sistema cuenta con una función para leer la distancia del sensor HC-SR04:
@@ -54,13 +54,8 @@ Proyecto para controlar un carro con ESP32 mediante un servidor HTTP y publicaci
 // Intervalo de lectura del sensor (ms)
 #define SENSOR_READ_INTERVAL 2000
 ```
-
-
-
-
 ## Instalación
 - Librerías: WebServer y PubSubClient.
-- Cambia SSID y password en el código.
 
 ## Documentación
 - **Colección Postman**: Disponible en [`/docs/docs/control.postman_collection.json`](./docs/control.postman_collection.json).
