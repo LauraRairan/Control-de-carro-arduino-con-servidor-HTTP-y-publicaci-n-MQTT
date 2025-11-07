@@ -42,7 +42,20 @@ Vigencias típicas:
 Es un mecanismo de seguridad en el que tanto el cliente como el servidor se autentican entre sí mediante certificados digitales válidos. Esto significa que el servidor presenta su certificado para demostrar su identidad al cliente, y el cliente también presenta el suyo para demostrar que está autorizado a comunicarse. Este proceso garantiza una comunicación más segura, ya que impide que dispositivos no autorizados establezcan conexión, y se utiliza especialmente en entornos donde se requiere alta confianza, como sistemas IoT o conexiones entre servicios críticos.
 
 ## ¿Cómo se habilita la validación de certificados en el ESP32?
-En el ESP32, al usar librerías como ```cpp WiFiClientSecure ```, se habilita la validación cargando el certificado raíz del servidor.
+En el ESP32, al usar librerías como ``` WiFiClientSecure ```, se habilita la validación cargando el certificado raíz del servidor.
+Ejemplo en código: 
+```
+#include <WiFiClientSecure.h>
+
+WiFiClientSecure client;
+
+client.setCACert(root_ca);  // Cargar certificado raíz
+if (!client.connect("example.com", 443)) {
+  Serial.println("Conexión fallida");
+}
+
+```
+Esto permite que el ESP32 verifique la autenticidad del servidor antes de enviar datos.
 
 
 
@@ -55,4 +68,5 @@ En el ESP32, al usar librerías como ```cpp WiFiClientSecure ```, se habilita la
 - CuriosidadesDeHackers. (2024, 29 agosto). TLS Downgrade(Ataque de degradación de TLS) ; Explicación y PoC. Curiosidades de Hackers. https://curiosidadesdehackers.com/tls-downgradeataque-de-degradacion-de-tls-explicacion-y-poc/#:~:text=Esta%20manipulaci%C3%B3n%20se%20aprovecha%20de,y%20sistemas%20expuestos%20al%20riesgo.
 - digicert (2025, 2 jumio). ¿Qué es una CA?: Autoridades de Certificación para Principiantes. https://www.digicert.com/blog/what-is-a-certificate-authority
 - Gaff, T. (2024, 24 julio). ¿Qué es la cadena de confianza de los certificados? Keyfactor. https://www.keyfactor.com/es/blog/certificate-chain-of-trust/
-- - Cloudflare (sf). ¿Qué es TLS (Transport Layer Security). https://www.cloudflare.com/es-es/learning/ssl/transport-layer-security-tls/
+-  Cloudflare (sf). ¿Qué es TLS (Transport Layer Security). https://www.cloudflare.com/es-es/learning/ssl/transport-layer-security-tls/
+- Llamas, L. (2025, 31 enero). Qué es y cómo usar autentificación en ESP32. Luis Llamas. https://www.luisllamas.es/autentificacion-en-esp32/
