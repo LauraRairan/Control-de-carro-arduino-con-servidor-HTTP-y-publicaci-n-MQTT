@@ -149,22 +149,170 @@ Compatibilidad con query params.
 
 Respuestas:
 - 200 OK
+   ```cpp
   {"ok":true}
 
 - 400 Bad Request
+   ```cpp
   {"error":"missing params"}
-
  o
- 
+  ```cpp
   {"error":"invalid direction"}
+````
 
+## POST /api/v1/move
+
+- Método: POST
+- URL: http://172.20.10.2/api/v1/move
+- Headers:
+  - Content-Type: application/json
+- Body (JSON):
+  ```cpp
+  {
+    "direction": "adelante",
+    "duration": 1200
+  }
+
+- Lógica interna:
+  1. Valida que exista direction y duration.
+  2. Ajusta duration al rango [0, MAX_MOVE_DURATION_MS].
+  3. Lee la distancia con readDistanceCm().
+  4. Si direction == "adelante" y la distancia es < SAFE_CM:
+     - Detiene los motores.
+     - Devuelve 409.
+  5. Si es seguro:
+     - Mueve el robot en esa dirección.
+     - Marca moving = true y calcula endTime.
+
+- Respuestas:
+  - 200 OK
+    ```cpp
+    {"ok":true}
+    
+- 400 Bad Request
+   ```cpp
+    {"error":"missing body"}
+o
+   ```cpp
+  {"error":"invalid direction"}
+````
+- 409 Conflict (obstáculo)
+  ```cpp
+  {"error":"OBSTACLE"}
+
+Adicionalmente, el ESP32 publica cada comando recibido en el tema MQTT car/instructions.
  
+### Temas MQTT
 
+En el firmware se definen:
 
+```c++
+#define MQTT_TOPIC_CMD      "car/instructions"
+#define MQTT_TOPIC_DISTANCE "car/telemetry/distance"
+#define MQTT_TOPIC_EVENT    "car/events"
+#define MQTT_TOPIC_INFO     "car/info/ip"
+````
+| Tema                     | Dirección      | Uso                                  | Ejemplo de payload                                          |
+| ------------------------ | -------------- | ------------------------------------ | ----------------------------------------------------------- |
+| `car/info/ip`            | ESP32 → Broker | Publica la IP del robot (retained)   | `{"ip":"172.20.10.2"}`                                      |
+| `car/telemetry/distance` | ESP32 → Broker | Distancia medida + timestamp         | `{"distance_cm":37.52,"ts":1234567}`                        |
+| `car/instructions`       | ESP32 → Broker | Log de comandos recibidos por el API | `{"direction":"adelante","duration":1200,"clientIP":"..."}` |
+| `car/events`             | ESP32 → Broker | Reservado para eventos futuros       | *(sin uso en esta versión)*                                 |
 
+La app Android se suscribe a:
 
+- car/telemetry/#
+- car/info/ip
 
+## Aplicación Android
+### MainActivity
 
+- Muestra dos botones:
+  - Mando → ControlActivity
+  - Voz → VoiceActivity
+  - 
+- Pequeñas animaciones al presionar (escala 0.9 → 1.0).
+
+### ControlActivity (modo mando)
+
+Archivo: ControlActivity.kt
+Broker MQTT:
+````cpp
+private val mqttServer = "ssl://test.mosquitto.org:8883"
+````
+- Carga el certificado de Mosquitto desde res/raw/mosquitto_org2.
+- Se conecta por TLS usando MqttAsyncClient y MqttConnectOptions.
+- Suscripciones:
+  - car/telemetry/#
+  - car/info/ip
+    
+- UI:
+  - Botones: btnArriba, btnAbajo, btnIzquierda, btnDerecha.
+  - Botón btnRevisar → healthcheck.
+  - TextViews:
+    - tvInfo: estado MQTT.
+    - tvHealth: estado del robot (healthcheck).
+    - tvComandos: log de comandos enviados.
+    - tvTelemetria: telemetría recibida (distance_cm).
+
+- Flujo:
+  - Cuando llega car/info/ip por MQTT:
+    - Guarda la IP en robotIp.
+      
+  - Al pulsar flechas:
+    - Construye JSON {"direction": "...", "duration": ...}.
+    - Envía POST /api/v1/move al robotIp.
+    - Muestra:
+      - Mensaje de éxito.
+      - Mensaje de obstáculo (OBSTACLE).
+      - Errores HTTP/red.
+
+### VoiceActivity (modo voz + IA)
+
+- Archivo: VoiceActivity.kt.
+- También se conecta a ssl://test.mosquitto.org:8883 con TLS.
+- Suscripciones:
+  - car/telemetry/#
+  - car/info/ip
+    
+- Elementos:
+  - Botón de micrófono btnVoz.
+  - Texto tipo consola (cuadroDeTexto).
+  - GIF del robot (GifDrawable).
+  - Telemetría (tvTelemetria).
+
+- Flujo de voz + IA:
+  
+1.  El usuario mantiene pulsado btnVoz:
+   - Se inicia MediaRecorder.
+   - Se guarda audio en voice_command.m4a.
+
+2. El usuario suelta el botón:
+   - Se detiene la grabación.
+   - Se llama a transcribeAudio(file):
+     - POST https://api.openai.com/v1/audio/transcriptions
+     - Modelo: "model": "gpt-4o-mini-transcribe"
+     - Devuelve el campo "text" con la transcripción.
+
+3. Se llama a getCommandsFromAI(text):
+   - Construye un prompt para convertir el texto → comandos sencillos:
+     - adelante, atras, izquierda, derecha, parar.
+   - Usa:
+     - POST https://api.openai.com/v1/chat/completions
+     - Modelo: "model": "gpt-4o-mini"
+  - Devuelve una lista tipo ["adelante","izquierda","parar"].
+
+4. enviarComandoRest(commands):
+   - Para cada comando:
+     - Envía POST /api/v1/move al robotIp.
+     - Interpreta respuestas:
+       ````cpp
+       - {"ok":true}
+       - {"error":"OBSTACLE"}
+
+5. Paralelamente:
+   - Se recibe telemetría por MQTT en car/telemetry/#.
+   - La app muestra los JSON en tvTelemetria.
 
 ## Aporte creativo/técnico (Nivel EXPERTO)
 
@@ -201,7 +349,9 @@ Para alcanzar el nivel **EXPERTO** de la rúbrica, el proyecto integra dos model
 Con esto, el robot se puede controlar **por voz** usando IA, cumpliendo el criterio de:
 > “Integrar algún API o modelo de inteligencia artificial (YOLO, OpenAI, etc.)”
 
-## 9. Uso de memoria (Flash y RAM)
+
+
+###  Uso de memoria (Flash y RAM)
 
 Uso reportado por el IDE de Arduino al cargar el sketch en el ESP32:
 
