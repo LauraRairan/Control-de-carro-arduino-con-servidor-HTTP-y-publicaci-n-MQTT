@@ -505,10 +505,10 @@ Se crea y se anexa la coleccion de postman con los siugientes endpoints:
      - Mensajes en car/telemetry/distance.
        
   2. Desde la app Android:
-     2.1 Modo Mando:
+     1. Modo Mando:
          - Probar flechas (adelante/atrás/izquierda/derecha).
          - Ver que se actualiza la telemetría y se puedan detectar obstáculos.
-     2.2 Modo Voz:
+     2. Modo Voz:
          - Mantener pulsado el botón de micrófono, dar instrucciones (“avanza un poco y para”).
          - Ver que el texto se transcribe y que se generan comandos válidos.
          - Confirmar que el robot se mueve y frena si hay obstáculos.
