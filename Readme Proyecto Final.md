@@ -40,8 +40,11 @@ Componentes principales:
     - Convierte texto de voz en comandos `["adelante","atrás","izquierda","derecha","parar"]`.
     - Ejecuta los comandos contra el robot vía REST.
     - Muestra telemetría por MQTT.
+      
+- **Red local**
+  - IP actual del robot: `172.20.10.2` (ejemplo de uso en los endpoints).
 
-### Diagrama de secuencia (PlantUML)
+## Diagrama de secuencia (PlantUML)
 
 El diagrama de secuencia se encuentra en `docs/sequence_robot.puml`.  
 Código (resumen):
@@ -57,6 +60,107 @@ participant "Sensor HC-SR04" as Sensor
 @enduml
 ```
 (ver archivo completo en /docs/sequence_robot.puml) ...
+
+## Firmware ESP32 (Arduino C++)
+
+Archivo principal (ejemplo): src/robot_2wd_esp32.ino.
+
+## Configuración por preprocesador
+
+#define USE_SIMULATED 0              // 0: HC-SR04 real, 1: sensor simulado
+
+// Wi-Fi
+#define WIFI_SSID "FreeWIFI_09"
+#define WIFI_PASS "eduard09"
+
+// MQTT (HiveMQ Cloud con TLS)
+#define MQTT_SERVER "e772b5c02ba747c792bf576e640bab45.s1.eu.hivemq.cloud"
+#define MQTT_PORT   8883
+#define MQTT_USER   "eduardmeza09"
+#define MQTT_PASS   "123456789eE"
+
+// Sensor y seguridad
+#define SAFE_CM                20.0f
+#define DIST_MIN_CM             5.0f
+#define DIST_MAX_CM           300.0f
+#define PUBLISH_INTERVAL_MS   500UL
+#define MAX_MOVE_DURATION_MS 5000
+
+Esto permite cambiar rápidamente:
+
+- Red WiFi
+- Broker MQTT
+- Distancia de seguridad
+- Intervalo de telemetría
+- Modo simulado vs físico
+  
+## Control de motores y sensor ultrasónico
+
+- Pines de motores:
+
+#define PIN_MOTOR1A 19
+#define PIN_MOTOR1B 21
+#define PIN_MOTOR2A 26
+#define PIN_MOTOR2B 25
+
+Funciones: stopMotors(), moveForward(), moveBackward(), turnLeft(), turnRight().
+
+- Pines del HC-SR04:
+  
+#define PIN_TRIG 5
+#define PIN_ECHO 18   // con divisor de voltaje
+
+- Lógica de medición:
+  - hcDistance():
+    - Pulso TRIG de 10 µs.
+    - pulseIn(PIN_ECHO, HIGH, PULSE_TIMEOUT_US).
+    - Convierte a cm y limita [DIST_MIN_CM, DIST_MAX_CM].
+
+- Anti-choques:
+  - En handleDistancePublish():
+    - Si cm <= SAFE_CM → stopMotors() y moving = false.
+
+## API REST (ESP32)
+
+Servidor HTTP: WebServer server(80);
+IP actual del robot (ejemplo): 172.20.10.2.
+
+### GET /api/v1/healthcheck
+
+- Método: GET
+- URL: http://172.20.10.2/api/v1/healthcheck
+- Respuesta 200:
+  
+  {
+  "status": "ok"
+  }
+
+### GET /api/v1/move
+
+Compatibilidad con query params.
+- Método: GET
+- URL: http://172.20.10.2/api/v1/move?direction=adelante&duration=1200
+- Parámetros:
+  - direction: adelante, atras, izquierda, derecha, parar
+  - duration: milisegundos, rango 0–5000
+
+Respuestas:
+- 200 OK
+  {"ok":true}
+
+- 400 Bad Request
+  {"error":"missing params"}
+
+ o
+ 
+  {"error":"invalid direction"}
+
+ 
+
+
+
+
+
 
 
 ## Aporte creativo/técnico (Nivel EXPERTO)
@@ -93,5 +197,41 @@ Para alcanzar el nivel **EXPERTO** de la rúbrica, el proyecto integra dos model
 
 Con esto, el robot se puede controlar **por voz** usando IA, cumpliendo el criterio de:
 > “Integrar algún API o modelo de inteligencia artificial (YOLO, OpenAI, etc.)”
+
+## 9. Uso de memoria (Flash y RAM)
+
+Uso reportado por el IDE de Arduino al cargar el sketch en el ESP32:
+
+```text
+Sketch uses 1037035 bytes (79%) of program storage space. Maximum is 1310720 bytes.
+Global variables use 45860 bytes (13%) of dynamic memory, leaving 281820 bytes for local variables. Maximum is 327680 bytes.
+````
+
+
+
+
+
+
+
+
+
+
+
+
+## Documentación
+- **Colección Postman**: Disponible en [`/docs/docs/control.postman_collection.json`](./docs/control.postman_collection.json).
+- **Codigo inicial**: Disponible en [`/docs/Control.ino`](./docs/Control.ino).
+- **Codigo Con sensor**: Disponible en [`/docs/ControlSensor.ino`](./docs/ControlSensor.ino).
+- **Diagrma**: Disponible en [`/docs/image.svg`](./docs/image.svg).
+- **Imagenes**: Disponible en [`/ima`](./ima).
+## Colaboradores
+
+- Profesor: [@fabianpaeri](https://github.com/fabianpaeri) (Docente).
+
+- Colaborador 1: Maria Fernanda Rodriguez Chaparrro [@maferodriguezch06](https://github.com/maferodriguezch06) (Estudiante)
+
+- Colaborador 2: Eduard Meza Salazar [@eduardmesa09](https://github.com/eduardmesa09) (Estudiante)
+
+- Colaborador 3: Laura Valentina Rairan Gavilan [@LauraRairan](https://github.com/LauraRairan) (Estudiante)
 
 
