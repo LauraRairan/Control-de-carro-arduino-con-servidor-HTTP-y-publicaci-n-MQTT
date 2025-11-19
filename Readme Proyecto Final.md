@@ -67,6 +67,8 @@ Archivo principal (ejemplo): src/robot_2wd_esp32.ino.
 
 ## Configuración por preprocesador
 
+ ```cpp
+
 #define USE_SIMULATED 0              // 0: HC-SR04 real, 1: sensor simulado
 
 // Wi-Fi
@@ -85,6 +87,7 @@ Archivo principal (ejemplo): src/robot_2wd_esp32.ino.
 #define DIST_MAX_CM           300.0f
 #define PUBLISH_INTERVAL_MS   500UL
 #define MAX_MOVE_DURATION_MS 5000
+````
 
 Esto permite cambiar rápidamente:
 
@@ -97,19 +100,19 @@ Esto permite cambiar rápidamente:
 ## Control de motores y sensor ultrasónico
 
 - Pines de motores:
-
+ ```cpp
 #define PIN_MOTOR1A 19
 #define PIN_MOTOR1B 21
 #define PIN_MOTOR2A 26
 #define PIN_MOTOR2B 25
-
+````
 Funciones: stopMotors(), moveForward(), moveBackward(), turnLeft(), turnRight().
 
 - Pines del HC-SR04:
-  
+ ```cpp
 #define PIN_TRIG 5
 #define PIN_ECHO 18   // con divisor de voltaje
-
+````
 - Lógica de medición:
   - hcDistance():
     - Pulso TRIG de 10 µs.
@@ -130,7 +133,7 @@ IP actual del robot (ejemplo): 172.20.10.2.
 - Método: GET
 - URL: http://172.20.10.2/api/v1/healthcheck
 - Respuesta 200:
-  
+   ```cpp
   {
   "status": "ok"
   }
