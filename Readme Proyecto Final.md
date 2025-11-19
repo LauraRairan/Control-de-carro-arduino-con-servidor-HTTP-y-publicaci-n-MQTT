@@ -474,7 +474,7 @@ Se crea y se anexa la coleccion de postman con los siugientes endpoints:
 ## Documentación
 - **Colección Postman**: Disponible en [`/docs/docs/Proyecto IoT.postman_collection.json`](./docs/Proyecto IoT.postman_collection.json).
 - **Codigo inicial**: Disponible en [`/docs/ControlTlsMqtt.ino`](./docs/ControlTlsMqtt.ino).
-- **Codigo APP Android**: Disponible en [`/docs/ControlSensor.ino`](./docs/ControlSensor.ino).
+- **Repositorio APP Android**: Disponible en [`linkCarApp`](linkCarApp).
 - **Diagrama**: Disponible en [`/docs/secuencia_robot.puml`](./docs/secuencia_robot.puml).
 - **Imagen Memoria usada**: Disponible en [`/ima`](./ima).
 
