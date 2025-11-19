@@ -282,37 +282,36 @@ private val mqttServer = "ssl://test.mosquitto.org:8883"
   - Telemetría (tvTelemetria).
 
 - Flujo de voz + IA:
-  
-1.  El usuario mantiene pulsado btnVoz:
-   - Se inicia MediaRecorder.
-   - Se guarda audio en voice_command.m4a.
+  1.  El usuario mantiene pulsado btnVoz:
+     - Se inicia MediaRecorder.
+     - Se guarda audio en voice_command.m4a.
 
-2. El usuario suelta el botón:
-   - Se detiene la grabación.
-   - Se llama a transcribeAudio(file):
-     - POST https://api.openai.com/v1/audio/transcriptions
-     - Modelo: "model": "gpt-4o-mini-transcribe"
-     - Devuelve el campo "text" con la transcripción.
+  2. El usuario suelta el botón:
+     - Se detiene la grabación.
+     - Se llama a transcribeAudio(file):
+       - POST https://api.openai.com/v1/audio/transcriptions
+       - Modelo: "model": "gpt-4o-mini-transcribe"
+       - Devuelve el campo "text" con la transcripción.
 
-3. Se llama a getCommandsFromAI(text):
-   - Construye un prompt para convertir el texto → comandos sencillos:
-     - adelante, atras, izquierda, derecha, parar.
-   - Usa:
-     - POST https://api.openai.com/v1/chat/completions
-     - Modelo: "model": "gpt-4o-mini"
-  - Devuelve una lista tipo ["adelante","izquierda","parar"].
+  3. Se llama a getCommandsFromAI(text):
+     - Construye un prompt para convertir el texto → comandos sencillos:
+       - adelante, atras, izquierda, derecha, parar.
+     - Usa:
+       - POST https://api.openai.com/v1/chat/completions
+       - Modelo: "model": "gpt-4o-mini"
+    - Devuelve una lista tipo ["adelante","izquierda","parar"].
 
-4. enviarComandoRest(commands):
-   - Para cada comando:
-     - Envía POST /api/v1/move al robotIp.
-     - Interpreta respuestas:
-       ````cpp
-       - {"ok":true}
-       - {"error":"OBSTACLE"}
+  4. enviarComandoRest(commands):
+     - Para cada comando:
+       - Envía POST /api/v1/move al robotIp.
+       - Interpreta respuestas:
+         ````cpp
+         - {"ok":true}
+         - {"error":"OBSTACLE"}
 
-5. Paralelamente:
-   - Se recibe telemetría por MQTT en car/telemetry/#.
-   - La app muestra los JSON en tvTelemetria.
+  5. Paralelamente:
+     - Se recibe telemetría por MQTT en car/telemetry/#.
+     - La app muestra los JSON en tvTelemetria.
 
 ## Aporte creativo/técnico (Nivel EXPERTO)
 
