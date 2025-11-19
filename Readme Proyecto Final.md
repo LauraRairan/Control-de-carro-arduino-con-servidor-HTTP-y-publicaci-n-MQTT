@@ -348,6 +348,82 @@ Para alcanzar el nivel **EXPERTO** de la rúbrica, el proyecto integra dos model
 Con esto, el robot se puede controlar **por voz** usando IA, cumpliendo el criterio de:
 > “Integrar algún API o modelo de inteligencia artificial (YOLO, OpenAI, etc.)”
 
+## Librerias usadas: 
+
+En el ESP32 (Arduino):
+- Arduino.h
+- WiFi.h
+- WiFiClientSecure.h
+- WebServer.h
+- PubSubClient.h
+
+En la app Android:
+Networking & HTTP:
+- OkHttpClient (paquete okhttp3).
+
+MQTT:
+- org.eclipse.paho.client.mqttv3.MqttAsyncClient
+- org.eclipse.paho.client.mqttv3.MqttConnectOptions
+- org.eclipse.paho.client.mqttv3.MqttCallback
+
+Concurrencia:
+- kotlinx-coroutines
+  - lifecycleScope
+  - Dispatchers.IO
+
+UI / UX:
+- androidx.appcompat
+- com.google.android.material (MaterialComponents)
+- pl.droidsonroids.gif.GifImageView / GifDrawable para GIF animados.
+
+JSON:
+- org.json.JSONObject
+- org.json.JSONArray
+
+Otros:
+- MediaRecorder para grabación de audio.
+- Vibrator / VibratorManager para feedback háptico.
+
+APIs externas:
+- OpenAI API:
+  - POST /v1/audio/transcriptions:
+    - Modelo: gpt-4o-mini-transcribe.
+    - Uso: transcribir audio → texto.
+
+  - POST /v1/chat/completions:
+    - Modelo: gpt-4o-mini.
+    - Uso: convertir texto transcrito → lista de comandos para el robot.
+
+### Limitaciones
+
+- Se utiliza solo un sensor ultrasónico frontal:
+  - No detecta obstáculos laterales ni traseros.
+
+- El API REST no tiene autenticación:
+  - Cualquier cliente en la misma red que conozca la IP puede mandar comandos.
+
+- En la app Android:
+  - si el servidor MQTT se cae, no se envian los datos de telemetría.
+
+- El control por voz depende de:
+  - Conexión a Internet.
+  - Disponibilidad de la API de OpenAI.
+ 
+### Posibilidades de mejora
+
+- Publicar también sensores del teléfono (acelerómetro, giroscopio, brújula) en temas MQTT para usar el móvil como sensor extra.
+  
+- Integrar un ESP32-CAM o la cámara del teléfono para stream de video.
+  
+- Portar el firmware a PlatformIO para un entorno más reproducible.
+  
+- Crear una visualización 2D (en la app o en una web) que pinte:
+  - Distancias medidas a lo largo del tiempo.
+  - O un mini mapa del entorno del robot.
+    
+- Integrar más sensores físicos:
+  - Acelerómetro MPU6050.
+  - Encoders (HC-020K/B83609).
 
 
 ###  Uso de memoria (Flash y RAM)
@@ -359,13 +435,38 @@ Sketch uses 1037035 bytes (79%) of program storage space. Maximum is 1310720 byt
 Global variables use 45860 bytes (13%) of dynamic memory, leaving 281820 bytes for local variables. Maximum is 327680 bytes.
 ````
 
+### Colección Postman: 
 
+Se crea y se anexa la coleccion de postman con los siugientes endpoints:
+  1. Healthcheck:
+     - Método: GET
+     - URL: http://172.20.10.2/api/v1/healthcheck
+     - Respuesta esperada:
+       ```cpp
+       {"status":"ok"}
 
+  2. Mover (POST):     
+     -  Método: POST
+     -  URL: http://172.20.10.2/api/v1/move
+     -  Headers:
+       - Content-Type: application/json
+     - Body:
+       ```cpp
+       {
+         "direction": "adelante",
+         "duration": 1200
+       }
+      - Tests sugeridos:
+        - Verificar código de estado = 200.
+        - Verificar que el body contiene "ok":true.
 
-
-
-
-
+  3. Obstáculo (test manual):
+     - Igual al caso anterior (POST /api/v1/move), pero colocando un objeto delante del sensor a menos de SAFE_CM.
+     - Respuesta esperada:
+       - Código: 409
+       - Body:
+         ```cpp
+         {"error":"OBSTACLE"}
 
 
 
@@ -374,16 +475,15 @@ Global variables use 45860 bytes (13%) of dynamic memory, leaving 281820 bytes f
 - **Colección Postman**: Disponible en [`/docs/docs/control.postman_collection.json`](./docs/control.postman_collection.json).
 - **Codigo inicial**: Disponible en [`/docs/Control.ino`](./docs/Control.ino).
 - **Codigo Con sensor**: Disponible en [`/docs/ControlSensor.ino`](./docs/ControlSensor.ino).
-- **Diagrma**: Disponible en [`/docs/image.svg`](./docs/image.svg).
+- **Diagrama**: Disponible en [`/docs/image.svg`](./docs/image.svg).
 - **Imagenes**: Disponible en [`/ima`](./ima).
+
+  
 ## Colaboradores
 
 - Profesor: [@fabianpaeri](https://github.com/fabianpaeri) (Docente).
-
 - Colaborador 1: Maria Fernanda Rodriguez Chaparrro [@maferodriguezch06](https://github.com/maferodriguezch06) (Estudiante)
-
 - Colaborador 2: Eduard Meza Salazar [@eduardmesa09](https://github.com/eduardmesa09) (Estudiante)
-
 - Colaborador 3: Laura Valentina Rairan Gavilan [@LauraRairan](https://github.com/LauraRairan) (Estudiante)
 
 
