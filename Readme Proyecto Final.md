@@ -473,7 +473,7 @@ Se crea y se anexa la coleccion de postman con los siugientes endpoints:
 
 ## Documentación
 - **Colección Postman**: Disponible en [`/docs/docs/control.postman_collection.json`](./docs/control.postman_collection.json).
-- **Codigo inicial**: Disponible en [`/docs/Control.ino`](./docs/Control.ino).
+- **Codigo inicial**: Disponible en [`/docs/ControlTlsMqtt.ino`](./docs/ControlTlsMqtt.ino).
 - **Codigo Con sensor**: Disponible en [`/docs/ControlSensor.ino`](./docs/ControlSensor.ino).
 - **Diagrama**: Disponible en [`/docs/image.svg`](./docs/image.svg).
 - **Imagenes**: Disponible en [`/ima`](./ima).
