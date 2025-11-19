@@ -202,7 +202,7 @@ o
 
 Adicionalmente, el ESP32 publica cada comando recibido en el tema MQTT car/instructions.
  
-### Temas MQTT
+## Temas MQTT
 
 En el firmware se definen:
 
