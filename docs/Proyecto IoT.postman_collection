@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "f4f3e369-5bf4-4ed5-87e2-f0f79e40f2b9",
+		"name": "Proyecto IoT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49870745",
+		"_collection_link": "https://eduardmeza09-1698158.postman.co/workspace/Eduard-Meza's-Workspace~4c3c17ca-64a7-48e6-88c5-429ff04acc59/collection/49870745-f4f3e369-5bf4-4ed5-87e2-f0f79e40f2b9?action=share&source=collection_link&creator=49870745"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://172.20.10.2/api/v1/healthcheck",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"10",
+						"2"
+					],
+					"path": [
+						"api",
+						"v1",
+						"healthcheck"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"direction\": \"atras\",\r\n    \"duration\": 1200\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://172.20.10.2/api/v1/move",
+					"protocol": "http",
+					"host": [
+						"172",
+						"20",
+						"10",
+						"2"
+					],
+					"path": [
+						"api",
+						"v1",
+						"move"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
