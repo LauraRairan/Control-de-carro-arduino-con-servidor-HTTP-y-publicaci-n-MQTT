@@ -471,16 +471,16 @@ Se crea y se anexa la coleccion de postman con los siugientes endpoints:
 
 ### Cómo ejecutar: 
   1. Configurar firmware ESP32:
-     1.1 Clonar el repositorio.
-     1.2 Abrir el proyecto en el IDE de Arduino o PlatformIO.
-     1.3 Ajustar en el código:
-         - WIFI_SSID, WIFI_PASS
-         - MQTT_SERVER, MQTT_USER, MQTT_PASS
-     1.4 Cargar el sketch al ESP32.
-     1.5 Abrir el monitor serie y comprobar:
-         - Conexión a WiFi.
-         - Conexión al broker MQTT.
-         - Publicación en car/info/ip (debe incluir la IP del robot).
+    1.1 Clonar el repositorio.
+    1.2 Abrir el proyecto en el IDE de Arduino o PlatformIO.
+    1.3 Ajustar en el código:
+      - WIFI_SSID, WIFI_PASS
+      - MQTT_SERVER, MQTT_USER, MQTT_PASS
+    1.4 Cargar el sketch al ESP32.
+    1.5 Abrir el monitor serie y comprobar:
+      - Conexión a WiFi.
+      - Conexión al broker MQTT.
+      - Publicación en car/info/ip (debe incluir la IP del robot).
 
   2. Configurar broker MQTT:
      2.1 Crear una instancia en HiveMQ Cloud (o usar Mosquitto).
