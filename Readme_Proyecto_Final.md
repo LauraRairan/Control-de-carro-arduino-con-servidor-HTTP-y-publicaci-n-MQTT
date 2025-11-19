@@ -467,9 +467,51 @@ Se crea y se anexa la coleccion de postman con los siugientes endpoints:
        - Body:
          ```cpp
          {"error":"OBSTACLE"}
+         ````
 
+### Cómo ejecutar: 
+  1. Configurar firmware ESP32:
+     1.1 Clonar el repositorio.
+     1.2 Abrir el proyecto en el IDE de Arduino o PlatformIO.
+     1.3 Ajustar en el código:
+         - WIFI_SSID, WIFI_PASS
+         - MQTT_SERVER, MQTT_USER, MQTT_PASS
+     1.4 Cargar el sketch al ESP32.
+     1.5 Abrir el monitor serie y comprobar:
+         - Conexión a WiFi.
+         - Conexión al broker MQTT.
+         - Publicación en car/info/ip (debe incluir la IP del robot).
 
+  2. Configurar broker MQTT:
+     2.1 Crear una instancia en HiveMQ Cloud (o usar Mosquitto).
+     2.2 Asegurar que el certificado raíz ISRG Root X1 esté configurado en el ESP32.
+     2.3 En Android:
+         - Incluir el certificado en res/raw/mosquitto_org2 o equivalente.
+         - Ajustar el hostname en el código si se desea usar el mismo broker para todo.
 
+  3. App Android:
+     3.1 Abrir el proyecto en Android Studio.
+     3.2 Configurar la API Key de OpenAI:
+         - En BuildConfig / local.properties → openAiApiKey.
+     3.3 Ajustar, si se desea, el valor de:       
+         - private val mqttServer = "ssl://test.mosquitto.org:8883"
+         para que apunte al mismo broker que el ESP32.
+     
+  5. Compilar e instalar la app en el dispositivo Android.
+
+### Pruebas
+  1. Con un cliente MQTT (MQTT Explorer, HiveMQ Webclient, etc.) verificar:
+     - Mensajes en car/info/ip.
+     - Mensajes en car/telemetry/distance.
+       
+  2. Desde la app Android:
+     2.1 Modo Mando:
+         - Probar flechas (adelante/atrás/izquierda/derecha).
+         - Ver que se actualiza la telemetría y se puedan detectar obstáculos.
+     2.2 Modo Voz:
+         - Mantener pulsado el botón de micrófono, dar instrucciones (“avanza un poco y para”).
+         - Ver que el texto se transcribe y que se generan comandos válidos.
+         - Confirmar que el robot se mueve y frena si hay obstáculos.
 
 ## Documentación
 - **Colección Postman**: Disponible en [`/docs/ProyectoIoT.postman_collection.json`](./docs/ProyectoIoT.postman_collection.json).
