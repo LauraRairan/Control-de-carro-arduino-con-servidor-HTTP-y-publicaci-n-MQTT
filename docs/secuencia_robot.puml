@@ -1,0 +1,90 @@
+@startuml
+actor Usuario as User
+participant "App Android\n(Main / Control / Voice)" as App
+participant "Broker MQTT\n(HiveMQ / Mosquitto TLS)" as Broker
+participant "ESP32 2WD\nFirmware" as ESP
+participant "Sensor HC-SR04" as Sensor
+participant "Motores 2WD" as Motors
+
+== Inicialización ==
+
+User -> App: Abre app (MainActivity)
+App -> App: Muestra botones Mando / Voz
+
+App -> Broker: CONNECT MQTT (TLS 1.2)
+Broker --> App: CONNACK
+
+ESP -> WiFi: Conexión WiFi (WIFI_SSID/WIFI_PASS)
+WiFi --> ESP: IP local (ej. 172.20.10.2)
+
+ESP -> Broker: CONNECT MQTT (TLS 1.2)
+Broker --> ESP: CONNACK
+
+ESP -> Broker: PUBLISH car/info/ip {"ip":"172.20.10.2"} (retained)
+Broker -> App: car/info/ip
+App -> App: Guarda robotIp
+
+== Healthcheck ==
+
+User -> App: Tap "Revisar robot"
+App -> ESP: HTTP GET /api/v1/healthcheck
+ESP --> App: 200 {"status":"ok"}
+App -> App: Muestra "🟢 Robot disponible"
+
+== Control remoto por botones (ControlActivity) ==
+
+loop Mientras el usuario envía comandos
+  User -> App: Toca botón (adelante / atrás / izquierda / derecha)
+  App -> ESP: HTTP POST /api/v1/move {"direction":dir,"duration":1200}
+
+  ESP -> Sensor: Trigger / Echo
+  Sensor --> ESP: distancia_cm
+
+  alt distancia_cm < SAFE_CM
+    ESP -> Motors: stopMotors()
+    ESP -> App: HTTP 409 {"error":"OBSTACLE"}
+  else distancia segura
+    ESP -> Motors: move(direction)
+    ESP -> ESP: endTime = millis() + duration
+    ESP -> App: HTTP 200 {"ok":true}
+  end
+
+  loop Cada PUBLISH_INTERVAL_MS
+    ESP -> Sensor: readDistanceCm()
+    Sensor --> ESP: distancia_cm
+    ESP -> Broker: PUBLISH car/telemetry/distance {"distance_cm":cm,"ts":now}
+
+    Broker -> App: car/telemetry/distance
+    App -> App: Actualiza panel de telemetría
+  end
+end
+
+== Control por voz (VoiceActivity) ==
+
+User -> App: Mantiene pulsado botón de micrófono
+App -> App: startRecording() (MediaRecorder)
+User -> App: Suelta botón
+App -> App: stopRecording()
+
+App -> "API OpenAI\n(audio/transcriptions)": POST audio.m4a
+"API OpenAI\n(audio/transcriptions)" --> App: texto reconocido
+
+App -> "API OpenAI\n(chat/completions)": POST prompt (mapeo a ["adelante","parar",...])
+"API OpenAI\n(chat/completions)" --> App: lista comandos
+
+loop por cada comando en lista
+  App -> ESP: HTTP POST /api/v1/move {"direction":cmd,"duration":999}
+  ESP -> Sensor: readDistanceCm()
+  Sensor --> ESP: distancia_cm
+  alt obstáculo
+    ESP -> Motors: stopMotors()
+    ESP -> App: 409 {"error":"OBSTACLE"}
+  else sin obstáculo
+    ESP -> Motors: move(cmd)
+    ESP -> App: 200 {"ok":true}
+  end
+  ESP -> Broker: PUBLISH car/telemetry/distance {...}
+  Broker -> App: car/telemetry/distance
+end
+
+@enduml
