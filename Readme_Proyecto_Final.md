@@ -521,6 +521,7 @@ Se crea y se anexa la coleccion de postman con los siugientes endpoints:
 - **Imagen Memoria usada**: Disponible en [`/ima/MemoriaUsada.jpg`](./ima/MemoriaUsada.jpg).
 - **Imagen MQTT Connection**: Disponible en [`/ima/MQTTConn.jpg`](./ima/MQTTConn.jpg).
 - **Imagen MQTT Telemetria**: Disponible en [`/ima/Telemetria.jpg`](./ima/Telemetria.jpg).
+- **Presentación**: Disponible en[`proyecto final IOT`](proyecto final IOT.pdf).
   
 ## Colaboradores
 
