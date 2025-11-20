@@ -76,7 +76,7 @@ Proyecto para controlar un carro con ESP32 mediante un servidor HTTP y publicaci
 - **Codigo Con sensor**: Disponible en [`/docs/ControlSensor.ino`](./docs/ControlSensor.ino).
 - **Diagrma**: Disponible en [`/docs/image.svg`](./docs/image.svg).
 - **Imagenes**: Disponible en [`/ima`](./ima).
-- **Presentaciones**: Disponible en [`presetaciones.pdf`](Control-de-carro-arduino-con-servidor-HTTP-y-publicación-MQTT/presentaciones.pdf)
+- **Presentaciones**: Disponible en [`presetaciones.pdf`](./presentaciones.pdf)
 
 ## Colaboradores
 
